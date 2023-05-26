@@ -1,0 +1,28 @@
+{
+  "name": "No need for stackoverflow",
+  "version": "1.0",
+  "description": "A Chrome extension that adds a chat answer section below Stack Overflow questions.",
+  "permissions": [ "storage", "tabs"],
+  "host_permissions": [ "https://*.stackoverflow.com/*" ],
+  "content_scripts": [
+    {
+      "matches": [ "https://*.stackoverflow.com/*" ],
+      "js": [ "contentScript.js" ]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [],
+      "matches": [ "https://*.stackoverflow.com/*" ]
+    }
+  ],
+  "action": {
+    "default_icon": {
+      "16": "assets/stackGPT.png",
+      "24": "assets/stackGPT.png",
+      "32": "assets/stackGPT.png"
+    },
+    "default_popup": "popup.html"
+  },
+  "manifest_version": 3
+}
