@@ -19,6 +19,7 @@ public partial class MouseRunner : Form
     private VideoCaptureDevice videoSource;
     int framerateHalver = 4;
     int FramerateBuffer = 0;
+    const string storage=  @"C:\Users\wenkm\AppData\Local\Temp\ModifiedPNG.PNG";
     public MouseRunner()
     {
         InitializeComponent();
@@ -60,28 +61,18 @@ public partial class MouseRunner : Form
                 FramerateBuffer = 0;
             else return;
 
-
         pictureBox1.Image?.Dispose();
-        //pictureBox1.Image = (Bitmap)eventArgs.Frame.Clone();
+        
         int.TryParse(textBox1.Text, out int i);
+        
         ConvertImage(eventArgs.Frame, Color.FromArgb(250, 250, 250), Color.White, i == -1 ? 100 : i);
-        // Bitmap image = new Bitmap(@"C:\Users\wenkm\AppData\Local\Temp\ModifiedPNG.PNG");
-
-        // var newImage = (Bitmap)image.Clone();new Bitmap(@"C:\Users\wenkm\AppData\Local\Temp\ModifiedPNG.PNG")
-        //image?.Dispose();
-        var im = new Bitmap(@"C:\Users\wenkm\AppData\Local\Temp\ModifiedPNG.PNG");
+        
+        var im = new Bitmap(storage);
         pictureBox1.Image = im;
     
-        var imCopy = new Bitmap(im.Width, im.Height);
-        using (Graphics g = Graphics.FromImage(imCopy))
-        {
-            g.DrawImage(im, 0, 0);
-        }
+        GetBlackDots(im);
 
-        GetBlackDots(imCopy);
-
-        // Dispose the 'imCopy' object after using it
-        imCopy.Dispose();
+        
     }
 
 
@@ -108,7 +99,7 @@ public partial class MouseRunner : Form
             bmp.UnlockBits(data);
             try
             {
-                bmp.Save(@"C:\Users\wenkm\AppData\Local\Temp\ModifiedPNG.PNG");
+                bmp.Save(storage);
             }
             catch (Exception ex)
             {
