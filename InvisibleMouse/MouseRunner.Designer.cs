@@ -31,6 +31,7 @@
             killCam = new Button();
             button2 = new Button();
             button1 = new Button();
+            textBox1 = new TextBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -53,7 +54,7 @@
             killCam.UseVisualStyleBackColor = true;
             killCam.Click += KillCam_Click;
             // 
-            // kill all
+            // button2
             // 
             button2.Location = new Point(713, 12);
             button2.Name = "button2";
@@ -66,18 +67,26 @@
             // button1
             // 
             button1.Location = new Point(12, 12);
-            button1.Name = "Start";
+            button1.Name = "button1";
             button1.Size = new Size(75, 23);
             button1.TabIndex = 3;
             button1.Text = "Start";
             button1.UseVisualStyleBackColor = true;
             button1.Click += Start_Click_1;
             // 
+            // textBox1
+            // 
+            textBox1.Location = new Point(339, 24);
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(100, 23);
+            textBox1.TabIndex = 4;
+            // 
             // MouseRunner
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(textBox1);
             Controls.Add(button1);
             Controls.Add(button2);
             Controls.Add(killCam);
@@ -86,11 +95,13 @@
             Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         private PictureBox pictureBox1;
         private Button killCam;
         private Button button2;
         private Button button1;
+        private TextBox textBox1;
     }
 }
