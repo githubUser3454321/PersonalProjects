@@ -10,13 +10,14 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing.Design;
+using System.Runtime.CompilerServices;
 
 namespace InvisibleMouse;
 
 public partial class MouseRunner : Form
 {
     private VideoCaptureDevice videoSource;
-    int framerateHalver = 2;
+    int framerateHalver = 4;
     int FramerateBuffer = 0;
     public MouseRunner()
     {
@@ -64,14 +65,26 @@ public partial class MouseRunner : Form
         //pictureBox1.Image = (Bitmap)eventArgs.Frame.Clone();
         int.TryParse(textBox1.Text, out int i);
         ConvertImage(eventArgs.Frame, Color.FromArgb(250, 250, 250), Color.White, i == -1 ? 100 : i);
-       // Bitmap image = new Bitmap(@"C:\Users\wenkm\AppData\Local\Temp\ModifiedPNG.PNG");
-        
-       // var newImage = (Bitmap)image.Clone();new Bitmap(@"C:\Users\wenkm\AppData\Local\Temp\ModifiedPNG.PNG")
-        //image?.Dispose();
-        pictureBox1.Image = new Bitmap(@"C:\Users\wenkm\AppData\Local\Temp\ModifiedPNG.PNG");
-        ToLowestPixel((Bitmap)newImage.Clone(), Color.Black);
+        // Bitmap image = new Bitmap(@"C:\Users\wenkm\AppData\Local\Temp\ModifiedPNG.PNG");
 
+        // var newImage = (Bitmap)image.Clone();new Bitmap(@"C:\Users\wenkm\AppData\Local\Temp\ModifiedPNG.PNG")
+        //image?.Dispose();
+        var im = new Bitmap(@"C:\Users\wenkm\AppData\Local\Temp\ModifiedPNG.PNG");
+        pictureBox1.Image = im;
+    
+        var imCopy = new Bitmap(im.Width, im.Height);
+        using (Graphics g = Graphics.FromImage(imCopy))
+        {
+            g.DrawImage(im, 0, 0);
+        }
+
+        GetBlackDots(imCopy);
+
+        // Dispose the 'imCopy' object after using it
+        imCopy.Dispose();
     }
+
+
     private static unsafe Bitmap ConvertImage(Bitmap bmp, Color source, Color targetColor, double threshold)
     {
         var thresh = threshold * threshold;
@@ -93,55 +106,33 @@ public partial class MouseRunner : Form
                 *p = target;
             }
             bmp.UnlockBits(data);
-            bmp.Save(@"C:\Users\wenkm\AppData\Local\Temp\ModifiedPNG.PNG");
+            try
+            {
+                bmp.Save(@"C:\Users\wenkm\AppData\Local\Temp\ModifiedPNG.PNG");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error saving the image: " + ex.Message);
+            }
 
             return bmp;
         }
     }
 
-    public static void ToLowestPixel(Bitmap image, Color lowestColor)
+    public List<String> GetBlackDots(Bitmap bitmapImage)
     {
-        int lowestX = 0;
-        int lowestY = 0;
 
-        Rectangle rect = new Rectangle(0, 0, image.Width, image.Height);
-        BitmapData bmpData = image.LockBits(rect, ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
-
-        IntPtr ptr = bmpData.Scan0;
-
-        int bytes = Math.Abs(bmpData.Stride) * image.Height;
-        byte[] rgbValues = new byte[bytes];
-
-        System.Runtime.InteropServices.Marshal.Copy(ptr, rgbValues, 0, bytes);
-
-        // Iterate through each pixel of the image
-        for (int y = 0; y < image.Height; y++)
+        Color pixelColor;
+        var list = new List<String>();
+        for (int y = 0; y < bitmapImage.Height; y++)
         {
-            for (int x = 0; x < image.Width; x++)
+            for (int x = 0; x < bitmapImage.Width; x++)
             {
-                int index = y * bmpData.Stride + 4 * x;
-
-                byte blue = rgbValues[index];
-                byte green = rgbValues[index + 1];
-                byte red = rgbValues[index + 2];
-
-                Color pixelColor = Color.FromArgb(red, green, blue);
-
-                if (pixelColor.GetBrightness() < 0.5)
-                    if (pixelColor.GetBrightness() < lowestColor.GetBrightness())
-                    {
-                        lowestX = x;
-                        lowestY = y;
-                        lowestColor = pixelColor;
-                    }
-
+                pixelColor = bitmapImage.GetPixel(x, y);
+                if (pixelColor.R == 0 && pixelColor.G == 0 && pixelColor.B == 0)
+                    list.Add(String.Format("x:{0} y:{1}", x, y));
             }
         }
-        image.UnlockBits(bmpData);
-        Console.WriteLine("Lowest Dark Pixel: X = " + lowestX + ", Y = " + lowestY);
-
-        //var cursor = new Cursor(handle: sa);
-        //Cursor.Position = new Point(cursor.Position.X - 20, cursor.Position.Y - 20);
-
+        return list;
     }
 }
