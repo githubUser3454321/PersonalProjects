@@ -1,0 +1,30 @@
+Task:
+build a console app in python where a user can give text input to what he wants and the app does it, using the OpenAI ChatGPT model, lets say a user wants to put his windows machine in to dark mode, The user will write something along the lines of: 'make my windows darkmode'. the App will ask ChatGPT for the cmd command for that, The App will review the code using a reviewing agent. the agent(ChatGPT model) will be asked to review the code. after that the model will ask the user if he wants this comand to be executet, if propted 'yes' the App will execute the programm. Include debugging steps, and execute the programm with admin rivilges. Debuging will function like this: the console output will be read and intepreted. The Output will be sent to a debugging agent, also a ChatGPT api call, the agent will try to figure out what the problem is and send a helpful information to the first agent who buid the first command. After a new command has been formed the new command will go trough the same procces as a new command. After all steps the comand will ouput the result, the user can interact with the programm after that and help figure out a problem and assist the ChatGPT agent. The user will be asked to accapt each command befor it is executed.
+
+Config:
+ChatEnvConfig.clear_structure: True
+ChatEnvConfig.git_management: False
+ChatEnvConfig.gui_design: True
+
+
+Roster:
+Chief Executive Officer, Counselor, Chief Human Resource Officer, Chief Product Officer, Chief Technology Officer, Programmer, Code Reviewer, Software Test Engineer, Chief Creative Officer
+
+Modality:
+console app
+
+Ideas:
+
+
+Language:
+ Python
+
+Code_Version:
+5.0
+
+Proposed_images:
+0
+
+Incorporated_images:
+0
+
